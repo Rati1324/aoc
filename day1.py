@@ -16,4 +16,18 @@ def solution():
         sum += int(first_num + last_num)
     return int(sum)
 
-print(solution())
+def solution2():
+    sum = 0
+
+    for word in input:
+        for char in word:
+            if char.isdigit():
+                first_num = char
+                break
+        for char in word[::-1]:
+            if char.isdigit():
+                last_num = char
+                break
+        sum += int(first_num+last_num)
+    return sum
+print(solution2())
