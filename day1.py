@@ -34,12 +34,12 @@ def part_2_solution():
     digits = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
     result = 0
     for i in range(len(input)):
-        for n in range(len(digits)):
-            index = input[i].find(digits[i])
-            if index != -1:
-                input[i] = input[i].replace(digits[n][:-1], str(n+1))
-        
         word = input[i]
+        for n in range(len(digits)):
+            while (index := word.find(digits[n])) != -1:
+                word = list(word)
+                word[index+1:(index+len(digits[n]))-1] = str(n+1)
+                word = ''.join(word)
         for i in range(len(word)):
             if word[i].isdigit():
                 first = word[i]
@@ -47,7 +47,6 @@ def part_2_solution():
         for i in range(len(word) - 1, -1, -1):
             if word[i].isdigit():
                 last = word[i]
-                print(word, first, last)
                 break
         result += int(str(first) + str(last))
     return result
