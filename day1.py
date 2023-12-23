@@ -30,23 +30,40 @@ def solution2():
         sum += int(first_num+last_num)
     return sum
 
-def part_2_solution():
+def find_matching_digit(word, start, end):
     digits = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+    substr = word[start:end]
+    if substr.isdigit():
+        return substr
+    matching_digits = [substr in i for i in digits]
+    if not len(matching_digits):
+        return False
+    indexes = [i for i in range(len(matching_digits)) if matching_digits[i]]
+    if any([digits[i] == substr for i in indexes]):
+        return digits.index(substr)+1
+    return False
+
+def part_2_solution():
     result = 0
     for i in range(len(input)):
         word = input[i]
-        for n in range(len(digits)):
-            while (index := word.find(digits[n])) != -1:
-                word = list(word)
-                word[index+1:(index+len(digits[n]))-1] = str(n+1)
-                word = ''.join(word)
-        for i in range(len(word)):
-            if word[i].isdigit():
-                first = word[i]
+        matching_digit = False
+        for start in range(len(word)):
+            for end in range(start+1, len(word)+1):
+                matching_digit = find_matching_digit(word, start, end)
+                if matching_digit:
+                    first = matching_digit
+                    break
+            if matching_digit:
                 break
-        for i in range(len(word) - 1, -1, -1):
-            if word[i].isdigit():
-                last = word[i]
+
+        for end in range(len(word), -1, -1):
+            for start in range(end, -1, -1):
+                matching_digit = find_matching_digit(word, start, end)
+                if matching_digit:
+                    last = matching_digit
+                    break
+            if matching_digit:
                 break
         result += int(str(first) + str(last))
     return result
