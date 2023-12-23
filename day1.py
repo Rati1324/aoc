@@ -35,11 +35,11 @@ def find_matching_digit(word, start, end):
     substr = word[start:end]
     if substr.isdigit():
         return substr
-    matching_digits = [substr in i for i in digits]
+    matching_digits = [i for i in range(len(digits)) if substr in digits[i]]
     if not len(matching_digits):
         return False
-    indexes = [i for i in range(len(matching_digits)) if matching_digits[i]]
-    if any([digits[i] == substr for i in indexes]):
+    # indexes = [i for i in range(len(matching_digits)) if matching_digits[i]]
+    if any([digits[i] == substr for i in matching_digits]):
         return digits.index(substr)+1
     return False
 
