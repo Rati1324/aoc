@@ -1,13 +1,36 @@
-input = open("input2.txt", "r").read().split("\n")
+import re
+input = open("input.txt", "r").read().split("\n")
 
 def solution():
-    # combinations = {"red": 12, "green": 13, "blue": 14}
-    print(input)
+    res = 0
+    color_limits = {"r": 12, "g": 13, "b": 14}
     for game in input:
-        colors = {"r": 0, "g": 0, "b": 0}
-        for i in range(6, len(game)):
-            if game[i].isdigit():
-                colors[game[i+1]] = i
-    print(colors)
+        numbers = re.findall(r'(\d+\s\w|\d+:)', game)
+        game_id = int(numbers[0][:-1])
+        good = True
+        for i in numbers[1:]:
+            i = i.split()
+            color = i[1]
+            amount = int(i[0])
+            if amount > color_limits[color]:
+                good = False
+                break
+        if good:
+            res += game_id
+    return res
 
-solution()
+def solution_part_2():
+    res = 0
+    for game in input:
+        numbers = re.findall(r'(\d+\s\w|\d+:)', game)
+        good = True
+        amount_max = {"r": 0, "g": 0, "b": 0}
+        for i in numbers[1:]:
+            i = i.split()
+            color = i[1]
+            amount = int(i[0])
+            if amount > amount_max[color]:
+                amount_max[color] = amount
+        res += amount_max["r"] * amount_max["g"] * amount_max["b"]
+    return res
+print(solution_part_2())
